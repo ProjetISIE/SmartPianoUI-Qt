@@ -44,6 +44,7 @@ IHM
 # Generated build files
 Makefile*
 release/
+moc_*
 
 # Environment
 .direnv/

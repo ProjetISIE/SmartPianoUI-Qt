@@ -15,27 +15,27 @@
           # stdenv = pkgs.clangStdenv; # Clang instead of GCC
         } {
           packages = with pkgs; [
-            alsa-lib # Lib
-            alsa-utils # Lib
+            # alsa-lib # Lib
+            # alsa-utils # Lib
             # gcc # Compiler
-            clang-tools # Clang CLIs
+            # clang-tools # Clang CLIs
             cmake # Automation tool
-            cmake-language-server # LSP
-            cppcheck # Static analysis
-            clang-uml # Generate UML from c(++) TEST it
-            doctest # Testing framework
-            doxygen # Documentation generator
-            gdb # Debugger
-            gnumake # Automation tool
-            gtest # Testing framework
-            lcov # Code coverage
+            # cmake-language-server # LSP
+            # cppcheck # Static analysis
+            # clang-uml # Generate UML from c(++) TEST it
+            # doctest # Testing framework
+            # doxygen # Documentation generator
+            # gdb # Debugger
+            # gnumake # Automation tool
+            # gtest # Testing framework
+            # lcov # Code coverage
             libsForQt5.full # Lib
-            libpulseaudio # Lib
-            lldb # Debug adapter
-            pulseaudio # Lib
-            rtmidi # Lib
-            pkg-config # Find libraries
-            valgrind # Debugging and profiling
+            # libpulseaudio # Lib
+            # lldb # Debug adapter
+            # pulseaudio # Lib
+            # rtmidi # Lib
+            # pkg-config # Find libraries
+            # valgrind # Debugging and profiling
           ];
           env = {
             CXX = "c++"; # Use Clang++ as the default C++ compiler
