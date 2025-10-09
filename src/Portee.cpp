@@ -50,7 +50,7 @@ void Portee::paintEvent(QPaintEvent *event)
 
     // Ajuster la position pour la portee en cle de fa
     Logger::log("[Portee] ligne 51 : Dessin de la portee en cle de fa");
-    int startYFa = startY + 200; // Distance augmentee entre les deux portees 
+    int startYFa = startY + 200; // Distance augmentee entre les deux portees
 
     // Dessiner la portee en cle de fa
     for (int i = 0; i < lineCount; ++i)
