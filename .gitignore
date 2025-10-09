@@ -36,12 +36,14 @@
 *.exe
 *.out
 *.app
+IHM
 
 # Debug information files
 *.dwo
 
 # Generated build files
 Makefile*
+release/
 
 # Environment
 .direnv/
