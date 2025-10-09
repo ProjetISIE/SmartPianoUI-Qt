@@ -22,8 +22,7 @@ void demarrerMDJ()
     }
     if (mdjProcess->state() == QProcess::NotRunning)
     {
-        mdjProcess->setWorkingDirectory("../PianoTrainerMDJV1");     // Répertoire de travail = MDJ
-        mdjProcess->start("../PianoTrainerMDJV1/PianoTrainerMDJV1"); // Chemin vers l'exécutable MDJ
+        mdjProcess->start("engine/PianoTrainerMDJV1"); // execute MDJ
         if (!mdjProcess->waitForStarted())
         {
             qWarning() << "[ERREUR] Impossible de démarrer le MDJ.";

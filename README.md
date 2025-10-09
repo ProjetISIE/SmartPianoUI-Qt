@@ -7,14 +7,34 @@ d'apprendre et de s'entrainer à jouer des **notes et des accords** sur un
 L'application propose plusieurs **modes de jeu** et évalue la performance du
 joueur en temps réel.
 
+## Nouvel environnement Nix
+
+L’environnement [Nix](https://nixos.org) permet de gérer les dépendances,
+l’environnement et d’effectuer des compilations (croisées) reproductibles.
+Il est défini dans le fichier [`flake.nix`](./flake.nix) et s’active avec
+la commande `nix flake develop` (Nix doit être installé) ou plus simplement via
+[direnv](https://direnv.net) (qui doit être installé séparément aussi).
+
+Commencer donc par activer l’environnement pour l’IHM avec `nix flake develop`,
+puis générer les Makefiles avec la commande `qmake`, et finalement compiler
+l’IHM avec la commande `make`.
+
+Réitérer désormais les mêmes étapes pour le MDJ (Moteur de Jeu), à commencer
+pas changer de répertoire de travail avec `cd engine`. Ensuite, activer
+l’environnement pour le MDJ avec `nix flake develop`, générer les Makefiles
+avec la commande `qmake`, et finalement compiler le MDJ avec la commande `make`.
+
+Bravo, il est maintenant possible de lancer l’IHM (qui devrait lancer le MDJ
+automatiquement) avec `./IHM` (après être revenu dans le répertoire `cd ..`).
+
 ## Installation
 
 ### Prérequis
 
 Avant d'installer l'application, assurez-vous d'avoir :
 
-- **Raspberry Pi 4** sous **Raspberry Pi OS** avec une carte Micro SD de **32 Go
-  minimum**.
+- **Raspberry Pi 4** sous **Raspberry Pi OS** avec une carte Micro SD
+  de **32 Go minimum**.
 - **Un écran tactile** connecte à la Raspberry Pi via HDMI.
 - **Un clavier MIDI** compatible (ex : `SWISSONIC EasyKeys49`).
 - **Connexion Internet** pour télécharger les dépendances.
@@ -111,7 +131,7 @@ l'IHM et le MDJ :
 
 ## Auteurs
 
-- **Auteurs** : Fankam Jisele, Fauré Guilhem
+- **Auteurs** version 2025-2026 : Fankam Jisele, Fauré Guilhem
 - **Auteur original** : _Mahut Vivien_
 - **Documentation utilisateur et technique** : _Voir
   `docs/DocumentationUtilisateur.pdf`_
