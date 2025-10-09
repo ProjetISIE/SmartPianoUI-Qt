@@ -52,3 +52,6 @@ release/
 # Editors
 .vscode
 .helix
+
+# Log files
+log_*.txt
