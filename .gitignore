@@ -40,7 +40,13 @@
 # Debug information files
 *.dwo
 
-# Misc
+# Generated build files
+Makefile*
+
+# Environment
+.direnv/
+.qmake.stash
+
+# Editors
 .vscode
 .helix
-.qmake.stash
