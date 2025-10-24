@@ -37,6 +37,7 @@
 *.out
 *.app
 IHM
+SmartPianoUI
 
 # Debug information files
 *.dwo

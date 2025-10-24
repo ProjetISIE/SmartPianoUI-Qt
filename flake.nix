@@ -2,49 +2,78 @@
   description = "A Nix-flake-based C/C++ development environment";
   inputs.nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05"; # NixOS Stable
   # inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-  # inputs.nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.1.*.tar.gz";
-  outputs = { self, nixpkgs }:
+  outputs =
+    { self, nixpkgs }:
     let
-      supportedSystems = [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" ];
-      forEachSupportedSystem = f:
-        nixpkgs.lib.genAttrs supportedSystems
-        (system: f { pkgs = import nixpkgs { inherit system; }; });
-    in {
-      devShells = forEachSupportedSystem ({ pkgs }: {
-        default = pkgs.mkShell.override {
-          # stdenv = pkgs.clangStdenv; # Clang instead of GCC
-        } {
-          packages = with pkgs; [
-            # alsa-lib # Lib
-            # alsa-utils # Lib
-            # gcc # Compiler
-            # clang-tools # Clang CLIs
-            cmake # Automation tool
-            # cmake-language-server # LSP
-            # cppcheck # Static analysis
-            # clang-uml # Generate UML from c(++) TEST it
-            # doctest # Testing framework
-            # doxygen # Documentation generator
-            # gdb # Debugger
-            # gnumake # Automation tool
-            # gtest # Testing framework
-            # lcov # Code coverage
-            libsForQt5.full # Lib
-            # libpulseaudio # Lib
-            # lldb # Debug adapter
-            # pulseaudio # Lib
-            # rtmidi # Lib
-            # pkg-config # Find libraries
-            # valgrind # Debugging and profiling
-          ];
-          env = {
-            CXX = "c++"; # Use Clang++ as the default C++ compiler
-            CC = "clang"; # Use Clang as the default C compiler
-            CXXFLAGS = ''
-              -std=c++23 -Wall -Wextra -Wpedantic -Wshadow -Wconversion
-            ''; # C++23 and more warnings
+      supportedSystems = [
+        "x86_64-linux"
+        "aarch64-linux"
+        "aarch64-darwin"
+      ];
+      forEachSupportedSystem =
+        f: nixpkgs.lib.genAttrs supportedSystems (system: f { pkgs = import nixpkgs { inherit system; }; });
+    in
+    {
+      packages = forEachSupportedSystem (
+        { pkgs }:
+        {
+          default = pkgs.stdenv.mkDerivation {
+            pname = "smart-piano-ui";
+            version = "0.1.0";
+            src = self;
+            nativeBuildInputs = [
+              pkgs.libsForQt5.qt5.qmake
+
+            ];
+            buildInputs = with pkgs; [
+              libsForQt5.qt5.qmake
+              libsForQt5.qt5.qtbase
+              libsForQt5.qt5.qtwayland
+              libsForQt5.qwt
+              xorg.libxcb
+              xorg.xcbutilwm
+              xorg.xcbutilimage
+              xorg.xcbutilkeysyms
+              xorg.xcbutilrenderutil
+              xcb-util-cursor
+            ];
+            configurePhase = ''
+              qmake SmartPianoUI.pro
+            '';
+            # buildPhase = ''
+            #   make -j$NIX_BUILD_CORES
+            # '';
+            installPhase = ''
+              install -Dm755 SmartPianoUI $out/bin/SmartPianoUI
+            '';
           };
-        };
-      });
+        }
+      );
+      devShells = forEachSupportedSystem (
+        { pkgs }:
+        {
+          default = pkgs.mkShell {
+            packages = with pkgs; [
+              libsForQt5.qt5.qmake
+              libsForQt5.qt5.qtbase
+              libsForQt5.qt5.qtwayland
+              libsForQt5.qwt
+              xorg.libxcb
+              xorg.xcbutilwm
+              xorg.xcbutilimage
+              xorg.xcbutilkeysyms
+              xorg.xcbutilrenderutil
+              xcb-util-cursor
+            ];
+            env = {
+              CXX = "c++";
+              CC = "clang";
+              CXXFLAGS = ''
+                -std=c++23 -Wall -Wextra -Wpedantic -Wshadow -Wconversion
+              '';
+            };
+          };
+        }
+      );
     };
 }
