@@ -1,79 +1,59 @@
 {
-  description = "A Nix-flake-based C/C++ development environment";
+  description = "Nix-flake-based Qt/C++ development environment";
   inputs.nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05"; # NixOS Stable
-  # inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
   outputs =
     { self, nixpkgs }:
     let
-      supportedSystems = [
-        "x86_64-linux"
-        "aarch64-linux"
-        "aarch64-darwin"
-      ];
-      forEachSupportedSystem =
-        f: nixpkgs.lib.genAttrs supportedSystems (system: f { pkgs = import nixpkgs { inherit system; }; });
+      eachSystem = f: {
+        x86_64-linux = f (import nixpkgs { system = "x86_64-linux"; });
+        aarch64-darwin = f (import nixpkgs { system = "aarch64-darwin"; });
+        aarch64-linux = f (import nixpkgs { system = "aarch64-linux"; });
+      };
+      crossSystem = "aarch64-linux";
     in
     {
-      packages = forEachSupportedSystem (
-        { pkgs }:
-        {
-          default = pkgs.stdenv.mkDerivation {
-            pname = "smart-piano-ui";
-            version = "0.1.0";
-            src = self;
-            nativeBuildInputs = [
-              pkgs.libsForQt5.qt5.qmake
-
-            ];
-            buildInputs = with pkgs; [
-              libsForQt5.qt5.qmake
-              libsForQt5.qt5.qtbase
-              libsForQt5.qt5.qtwayland
-              libsForQt5.qwt
-              xorg.libxcb
-              xorg.xcbutilwm
-              xorg.xcbutilimage
-              xorg.xcbutilkeysyms
-              xorg.xcbutilrenderutil
-              xcb-util-cursor
-            ];
-            configurePhase = ''
-              qmake SmartPianoUI.pro
-            '';
-            # buildPhase = ''
-            #   make -j$NIX_BUILD_CORES
-            # '';
-            installPhase = ''
-              install -Dm755 SmartPianoUI $out/bin/SmartPianoUI
-            '';
-          };
-        }
-      );
-      devShells = forEachSupportedSystem (
-        { pkgs }:
-        {
-          default = pkgs.mkShell {
-            packages = with pkgs; [
-              libsForQt5.qt5.qmake
-              libsForQt5.qt5.qtbase
-              libsForQt5.qt5.qtwayland
-              libsForQt5.qwt
-              xorg.libxcb
-              xorg.xcbutilwm
-              xorg.xcbutilimage
-              xorg.xcbutilkeysyms
-              xorg.xcbutilrenderutil
-              xcb-util-cursor
-            ];
-            env = {
-              CXX = "c++";
-              CC = "clang";
-              CXXFLAGS = ''
-                -std=c++23 -Wall -Wextra -Wpedantic -Wshadow -Wconversion
-              '';
-            };
-          };
-        }
-      );
+      packages = eachSystem (pkgs: {
+        smart-piano-ui = pkgs.stdenv.mkDerivation {
+          pname = "smart-piano-ui";
+          version = "0.1.0";
+          src = self;
+          nativeBuildInputs = with pkgs; [
+            libsForQt5.qt5.qmake # Qt build tool
+            libsForQt5.qt5.wrapQtAppsHook # Qt build tool
+          ];
+          buildInputs =
+            let
+              inputs =
+                _pkgs: with _pkgs; [
+                  libsForQt5.qt5.qtbase # Qt
+                  libsForQt5.qt5.qtwayland # For Wayland support (linux)
+                  xorg.libxcb # For X11 support (linux)
+                ];
+            in
+            (inputs pkgs)
+            ++ (nixpkgs.lib.lists.optional (pkgs.system != crossSystem) [ ]
+              # (inputs (
+              #   import nixpkgs {
+              #     localSystem = pkgs.system;
+              #     crossSystem = crossSystem;
+              #   }))
+            );
+          installPhase = "install -D SmartPianoUI $out/SmartPianoUI";
+        };
+        default = self.packages.${pkgs.system}.smart-piano-ui;
+      });
+      devShells = eachSystem (pkgs: {
+        default = pkgs.mkShell {
+          nativeBuildInputs = self.packages.${pkgs.system}.default.nativeBuildInputs;
+          buildInputs = self.packages.${pkgs.system}.default.buildInputs;
+          # env = {
+          #   CXX = "c++";
+          #   CC = "clang";
+          #   CXXFLAGS = ''
+          #     -std=c++23 -Wall -Wextra -Wpedantic -Wshadow -Wconversion
+          #   '';
+          # };
+        };
+      });
     };
 }
