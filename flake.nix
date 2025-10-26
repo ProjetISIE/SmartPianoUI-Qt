@@ -40,6 +40,7 @@
               libsForQt5.qt5.qtbase # Qt
               libsForQt5.qt5.qtwayland # For Wayland support (linux)
               xorg.libxcb # For X11 support (linux)
+              quickemu # Run VM easily by executing vm.conf
             ];
           };
         }

@@ -51,6 +51,8 @@ result
 # Environment
 .direnv/
 .qmake.stash
+debian*.iso
+debian*.qcow2
 
 # Editors
 .vscode
