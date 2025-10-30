@@ -1,23 +1,26 @@
 {
-  libsForQt5,
+  mkDerivation,
   self,
-  stdenv,
-  xorg,
 }:
-stdenv.mkDerivation {
+mkDerivation {
   pname = "smart-piano-ui";
   version = "0.1.0";
   src = self;
-  nativeBuildInputs = [
-    libsForQt5.qt5.qmake # Qt build tool
-    libsForQt5.qt5.wrapQtAppsHook # Qt build tool
-  ];
-  buildInputs = [
-    libsForQt5.qt5.qtbase # Qt
-    libsForQt5.qt5.qtwayland # For Wayland support (linux)
-    xorg.libxcb # For X11 support (linux)
-  ];
-  configurePhase = "qmake";
-  buildPhase = "make";
-  installPhase = "install -D SmartPianoUI $out/SmartPianoUI";
+  # nativeBuildInputs = [
+  #   qmake # Qt build tool, included by qt5.mkDerivation
+  #   qttools # Qt tooling
+  #   wrapQtAppsHook # Qt build tool, included by qt5.mkDerivation
+  # ];
+  # buildInputs = [
+  #   qtbase # Qt itself, included by qt5.mkDerivation
+  #   qtsvg # Qt SVG lib, included by qt5.mkDerivation
+  #   libxcb # X11 support (old Linux)
+  #   qtwayland # Wayland support (Linux)
+  # ];
+  configurePhase = ''
+    qmake
+  '';
+  installPhase = ''
+    install -D SmartPianoUI $out/bin/ui
+  '';
 }
