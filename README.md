@@ -9,25 +9,19 @@ joueur en temps réel.
 
 ## Nouvel environnement Nix
 
-L’environnement [Nix](https://nixos.org) permet de gérer les dépendances,
-l’environnement et d’effectuer des compilations (croisées) reproductibles.
-Il est défini dans le fichier [`flake.nix`](./flake.nix) et s’active avec
-la commande `nix flake develop` (Nix doit être installé) ou plus simplement via
-[direnv](https://direnv.net) (qui doit être installé séparément aussi).
+L’environnement [Nix](https://nixos.org) permet de télécharger les
+(bonnes versions des) dépendances, configurer l’environnement, et permettre
+in-fine d’effectuer des compilations (croisées) reproductibles.
+L’environnement Nix est défini dans [`flake.nix`](./flake.nix) et s’active avec
+la commande `nix flake develop` (`nix` doit être installé) ou plus simplement
+via [`direnv`](https://direnv.net) (qui doit aussi être installé séparément).
 
-Commencer donc par activer l’environnement pour l’IHM avec `nix flake develop`,
-puis générer les Makefiles avec la commande `qmake`, et finalement compiler
-l’IHM avec la commande `make`.
+Pour compiler le projet, il est possible d’utiliser qmake (`qmake` puis `make`)
+directement depuis un environnement Nix activé, mais la solution préconisée
+(car reproductible) est d’utiliser `nix build` ; ou `nix build .#cross` pour
+compiler en ciblant l’architecture de la Raspberry Pi 4 (ARM64).
 
-Réitérer désormais les mêmes étapes pour le MDJ (Moteur de Jeu), à commencer
-pas changer de répertoire de travail avec `cd engine`. Ensuite, activer
-l’environnement pour le MDJ avec `nix flake develop`, générer les Makefiles
-avec la commande `qmake`, et finalement compiler le MDJ avec la commande `make`.
-
-Bravo, il est maintenant possible de lancer l’IHM (qui devrait lancer le MDJ
-automatiquement) avec `./IHM` (après être revenu dans le répertoire `cd ..`).
-
-## Installation
+## Ancienne méthode de compilation et d’installation
 
 ### Prérequis
 
