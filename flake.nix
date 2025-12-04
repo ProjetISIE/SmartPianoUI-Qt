@@ -1,10 +1,10 @@
 {
-  description = "Nix-flake-based Qt/C++ development environment";
-  inputs.nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
+  description = "Nix flake Qt/C++ development environment";
+  inputs.nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
   outputs =
     { self, nixpkgs }:
     let
-      eachSystem =
+      systems =
         f:
         let
           localSystems = [
@@ -25,31 +25,31 @@
         );
     in
     {
-      packages = eachSystem (
+      packages = systems (
         pkgs: crossPkgs: {
-          smart-piano-ui = pkgs.libsForQt5.callPackage ./smartPianoUi.nix { inherit self; };
-          cross-smart-piano-ui = crossPkgs.libsForQt5.callPackage ./smartPianoUi.nix { inherit self; };
-          default = self.packages.${pkgs.system}.smart-piano-ui;
-          cross = self.packages.${pkgs.system}.cross-smart-piano-ui;
+          smart-piano-ui = pkgs.qt5.callPackage ./smartPianoUi.nix { inherit self; };
+          cross-smart-piano-ui = crossPkgs.qt5.callPackage ./smartPianoUi.nix { inherit self; };
+          default = self.packages.${pkgs.stdenv.hostPlatform.system}.smart-piano-ui;
+          cross = self.packages.${pkgs.stdenv.hostPlatform.system}.cross-smart-piano-ui;
         }
       );
-      devShells = eachSystem (
+      devShells = systems (
         pkgs: crossPkgs: {
-          default = pkgs.mkShell {
-            packages = with pkgs; [
-              clang-tools # Clang CLIs, including LSP
-              cmake-language-server # Cmake LSP
-              cppcheck # C++ Static analysis
-              doctest # Testing framework
-              doxygen # Documentation generator
-              gtest # Testing framework
-              lcov # Code coverage
-              lldb # Clang debug adapter
-              valgrind # Debugging and profiling
-            ];
-            nativeBuildInputs = self.packages.${pkgs.system}.smart-piano-ui.nativeBuildInputs;
-            buildInputs = self.packages.${pkgs.system}.smart-piano-ui.buildInputs;
-          };
+          default =
+            pkgs.mkShell.override
+              {
+                stdenv = pkgs.clangStdenv; # Clang instead of GCC
+              }
+              {
+                # packages = with pkgs; [
+                #   clang-tools # Clang CLIs, including LSP
+                #   cmake-language-server # Cmake LSP
+                #   lldb # Clang debug adapter
+                # ];
+                nativeBuildInputs =
+                  self.packages.${pkgs.stdenv.hostPlatform.system}.smart-piano-ui.nativeBuildInputs;
+                buildInputs = self.packages.${pkgs.stdenv.hostPlatform.system}.smart-piano-ui.buildInputs;
+              };
         }
       );
     };
