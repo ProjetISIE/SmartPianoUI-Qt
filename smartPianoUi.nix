@@ -4,7 +4,7 @@
 }:
 mkDerivation {
   pname = "smart-piano-ui";
-  version = "0.1.0";
+  version = "0.0.0";
   src = self;
   # nativeBuildInputs = [
   #   qmake # Qt build tool, included by qt5.mkDerivation
