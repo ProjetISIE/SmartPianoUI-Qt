@@ -22,7 +22,7 @@ void demarrerMDJ()
     }
     if (mdjProcess->state() == QProcess::NotRunning)
     {
-        mdjProcess->start("./engine/result/bin/SmartPiano"); // execute MDJ
+        mdjProcess->start("./engine/result/bin/engine"); // execute MDJ
         if (!mdjProcess->waitForStarted())
         {
             qWarning() << "[ERREUR] Impossible de démarrer le MDJ.";
