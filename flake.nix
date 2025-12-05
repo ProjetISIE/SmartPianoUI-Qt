@@ -36,12 +36,14 @@
       devShells = systems (
         pkgs: crossPkgs: {
           default =
-            pkgs.mkShell.override
-              {
-                stdenv = pkgs.clangStdenv; # Clang instead of GCC
-              }
+            pkgs.mkShell
+              # .override
+              #   {
+              #     stdenv = pkgs.clangStdenv; # Clang instead of GCC
+              #   }
               {
                 packages = with pkgs; [
+                  bear # Build EAR
                   # clang-tools # Clang CLIs, including LSP
                   clang-uml # Clang UML diagram generator
                   # cmake-language-server # Cmake LSP

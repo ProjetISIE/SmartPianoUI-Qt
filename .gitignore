@@ -53,6 +53,7 @@ result
 .qmake.stash
 debian*.iso
 debian*.qcow2
+diagrams/
 
 # Editors
 .vscode
