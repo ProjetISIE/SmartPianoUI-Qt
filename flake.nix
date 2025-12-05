@@ -41,11 +41,12 @@
                 stdenv = pkgs.clangStdenv; # Clang instead of GCC
               }
               {
-                # packages = with pkgs; [
-                #   clang-tools # Clang CLIs, including LSP
-                #   cmake-language-server # Cmake LSP
-                #   lldb # Clang debug adapter
-                # ];
+                packages = with pkgs; [
+                  # clang-tools # Clang CLIs, including LSP
+                  clang-uml # Clang UML diagram generator
+                  # cmake-language-server # Cmake LSP
+                  # lldb # Clang debug adapter
+                ];
                 nativeBuildInputs =
                   self.packages.${pkgs.stdenv.hostPlatform.system}.smart-piano-ui.nativeBuildInputs;
                 buildInputs = self.packages.${pkgs.stdenv.hostPlatform.system}.smart-piano-ui.buildInputs;

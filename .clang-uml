@@ -1,0 +1,24 @@
+# .clang-uml
+compilation_database_dir: build
+output_directory: diagrams
+
+diagrams:
+  smart_piano_class_diagram:
+    type: class
+    # Source files to analyze
+    glob:
+      - src/*.cpp
+      - include/*.h
+    
+    # Paths to include in the diagram (helps filter relevance)
+    include:
+      paths:
+        - src
+        - include
+
+    # Exclude system namespaces to keep the diagram readable
+    exclude:
+      namespaces:
+        - std
+        - Qt
+        - Ui
