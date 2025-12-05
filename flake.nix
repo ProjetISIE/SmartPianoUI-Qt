@@ -27,8 +27,8 @@
     {
       packages = systems (
         pkgs: crossPkgs: {
-          smart-piano-ui = pkgs.qt5.callPackage ./smartPianoUi.nix { inherit self; };
-          cross-smart-piano-ui = crossPkgs.qt5.callPackage ./smartPianoUi.nix { inherit self; };
+          smart-piano-ui = pkgs.qt5.callPackage ./ui.nix { inherit self; };
+          cross-smart-piano-ui = crossPkgs.qt5.callPackage ./ui.nix { inherit self; };
           default = self.packages.${pkgs.stdenv.hostPlatform.system}.smart-piano-ui;
           cross = self.packages.${pkgs.stdenv.hostPlatform.system}.cross-smart-piano-ui;
         }
@@ -43,6 +43,7 @@
               #   }
               {
                 packages = with pkgs; [
+                  alsa-utils
                   bear # Build EAR
                   # clang-tools # Clang CLIs, including LSP
                   clang-uml # Clang UML diagram generator
