@@ -1,33 +1,16 @@
-compilation_database_dir: .
+compilation_database_dir: build
 output_directory: diagrams
-
-query_driver: "/nix/store/*/bin/clang++"
-relative_to: .
-
 diagrams:
-  smart_piano_class_diagram:
+  classes:
     type: class
     glob:
-      - src/*.cpp
       - include/*.h
-    exclude:
-      paths:
-        - testIHM/*
-      namespaces:
-        - std
-        - Qt
-        - QtCore
-        - QtGui
-        - QtWidgets
-        - Unnamed # Hides anonymous namespaces
+      - src/*.cpp
+    using_namespace:
+      - SmartPiano
     include:
       namespaces:
-        - . # Include your global namespace classes
-    generate_method_arguments: full
-    generate_packages: false
-    package_type: namespace
-    plantuml:
-      before:
-        - 'skinparam linetype ortho'
-        - 'skinparam classAttributeIconSize 0' # Use public/private text instead of symbols if preferred
-        - 'hide empty members'
+        - SmartPiano
+    # exclude:
+    #   namespaces:
+    #     - ?

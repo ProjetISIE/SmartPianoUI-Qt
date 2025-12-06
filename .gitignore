@@ -47,6 +47,7 @@ Makefile*
 release/
 moc_*
 result
+build/
 
 # Environment
 .direnv/
