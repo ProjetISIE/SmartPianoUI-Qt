@@ -1,16 +1,23 @@
 compilation_database_dir: build
 output_directory: diagrams
+query_driver: "clang++"
 diagrams:
-  classes:
+  SmartPianoClasses:
     type: class
     glob:
       - include/*.h
       - src/*.cpp
-    using_namespace:
-      - SmartPiano
     include:
+      paths:
+        - include
+        - src
+    exclude:
       namespaces:
-        - SmartPiano
-    # exclude:
-    #   namespaces:
-    #     - ?
+        - std
+      elements:
+        - r: "^Q.*"
+    group_methods: false
+    plantuml:
+      before:
+        - "skinparam classAttributeIconSize 0"
+        - "skinparam dpi 200"

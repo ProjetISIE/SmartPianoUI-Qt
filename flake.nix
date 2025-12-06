@@ -36,11 +36,10 @@
       devShells = systems (
         pkgs: crossPkgs: {
           default =
-            pkgs.mkShell
-              # .override
-              #   {
-              #     stdenv = pkgs.clangStdenv; # Clang instead of GCC
-              #   }
+            pkgs.mkShell.override
+              {
+                stdenv = pkgs.clangStdenv; # Clang instead of GCC
+              }
               {
                 packages = with pkgs; [
                   alsa-utils
